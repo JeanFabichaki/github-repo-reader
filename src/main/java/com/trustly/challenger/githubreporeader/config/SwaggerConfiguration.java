@@ -19,8 +19,9 @@ public class SwaggerConfiguration {
     public Docket createRestApi() {
         return new Docket(DocumentationType.OAS_30)
             .apiInfo(new ApiInfoBuilder()
-                .description("My Reactive API")
-                .title("My Domain object API")
+                .description("API that returns the total number of lines and the total number of bytes of all the "
+                    + "files of a given public Github repository, grouped by file extension.")
+                .title("Trustly Technical Challenge for Developers")
                 .version("1.0.0")
                 .build())
             .enable(true)

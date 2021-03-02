@@ -14,8 +14,7 @@ import reactor.core.publisher.Flux;
 @Api(produces = MediaType.APPLICATION_JSON_VALUE)
 public interface GithubAPI {
 
-    //TODO Classe de erro customizada
-    @ApiOperation(value = "Get Github Repository Information")
+    @ApiOperation(value = "Endpoint to get information about a repository")
     @ApiResponses(value = {
         @ApiResponse(code = 202, message = "Get Information successfully", response = ExtensionRepresentation.class),
         @ApiResponse(code = 404, message = "Repository Private or Not Found"),
