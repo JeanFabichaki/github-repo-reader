@@ -14,7 +14,7 @@ import com.trustly.challenger.githubreporeader.service.GithubService;
 import reactor.core.publisher.Flux;
 
 @RestController
-@RequestMapping("/analysis")
+@RequestMapping("/api")
 public class GithubController implements GithubAPI {
 
     @Autowired

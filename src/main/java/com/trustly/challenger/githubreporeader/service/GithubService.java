@@ -1,8 +1,5 @@
 package com.trustly.challenger.githubreporeader.service;
 
-import static java.util.Objects.nonNull;
-
-import java.time.Duration;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +10,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.trustly.challenger.githubreporeader.mapper.RepoRepresentationMapper;
 import com.trustly.challenger.githubreporeader.presentation.controller.representation.ExtensionRepresentation;
 import com.trustly.challenger.githubreporeader.repository.ZipFileRepository;
-import com.trustly.challenger.githubreporeader.repository.impl.ZipFileRepositoryImpl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

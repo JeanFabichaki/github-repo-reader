@@ -10,8 +10,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import com.trustly.challenger.githubreporeader.exception.NotFoundException;
 import com.trustly.challenger.githubreporeader.mapper.RepoRepresentationMapper;
 import com.trustly.challenger.githubreporeader.presentation.controller.GithubController;
+import com.trustly.challenger.githubreporeader.presentation.controller.representation.ExtensionRepresentation;
 import com.trustly.challenger.githubreporeader.service.GithubService;
 
 import reactor.core.publisher.Flux;
@@ -30,17 +32,21 @@ class GithubControllerIntegrationTest {
     private RepoRepresentationMapper mapper;
 
     @Test
-    void testOK() {
+    void shouldReturn200() {
 
         String user = "JeanFabichaki";
         String repo = "todo-rust";
 
         Mockito.when(service.getRepoInformation(user, repo))
-            .thenReturn(Flux.empty());
+            .thenReturn(Flux.just(ExtensionRepresentation.builder()
+                .totalLines(1l)
+                .extension("java")
+                .totalBytes(1L)
+                .build()));
 
         webClient.get()
             .uri(uriBuilder -> uriBuilder
-            .path("/analysis/user/{user}/repo/{repo}")
+            .path("/api/user/{user}/repo/{repo}")
             .build(user, repo))
             .header(HttpHeaders.ACCEPT, "application/json")
             .exchange()
@@ -49,15 +55,24 @@ class GithubControllerIntegrationTest {
         Mockito.verify(service, Mockito.times(1)).getRepoInformation(user, repo);
     }
 
-    void whenNotSendRepoMustReturnBadRequest(){
+    @Test
+    void shouldReturn404WithInvalidRepo(){
 
-    }
+        String user = "JeanFabichaki";
+        String repo = "notfound";
 
-    void whenNotSendUserMustReturnBadRequest(){
+        Mockito.when(service.getRepoInformation(user, repo))
+            .thenReturn(Flux.error(new NotFoundException()));
 
-    }
+        webClient.get()
+            .uri(uriBuilder -> uriBuilder
+                .path("/api/user/{user}/repo/{repo}")
+                .build(user, repo))
+            .header(HttpHeaders.ACCEPT, "application/json")
+            .exchange()
+            .expectStatus().isNotFound();
 
-    void whenSendInvalidRepoMustReturnNotFound(){
+        Mockito.verify(service, Mockito.times(1)).getRepoInformation(user, repo);
 
     }
 }

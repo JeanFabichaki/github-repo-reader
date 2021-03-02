@@ -13,12 +13,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.trustly.challenger.githubreporeader.util.ZippedFileInputStream;
 import com.trustly.challenger.githubreporeader.domain.File;
+import com.trustly.challenger.githubreporeader.exception.NotFoundException;
+import com.trustly.challenger.githubreporeader.exception.ZipFileException;
 import com.trustly.challenger.githubreporeader.repository.ZipFileRepository;
+import com.trustly.challenger.githubreporeader.util.ZippedFileInputStream;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -35,14 +38,16 @@ public class ZipFileRepositoryImpl implements ZipFileRepository {
    private Mono<InputStream> downloadStreamFile(final String url) {
 
         return WebClient.builder()
-            .baseUrl(url).build()
+            .baseUrl(url)
+            .build()
             .get().retrieve()
+            .onStatus(HttpStatus.NOT_FOUND::equals, resp -> Mono.error(new NotFoundException()))
             .bodyToFlux(DataBuffer.class)
             .map(b -> b.asInputStream(true))
             .reduce(SequenceInputStream::new);
     }
 
-    private List<File> convertInputStreamToListFile(final InputStream inputStream) {
+    private List<File> convertInputStreamToListFile(final InputStream inputStream) throws ZipFileException {
 
         var informationList = new ArrayList<File>();
         try (ZipInputStream stream = new ZipInputStream(inputStream)) {
@@ -58,7 +63,8 @@ public class ZipFileRepositoryImpl implements ZipFileRepository {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error read zip file", e);
+            throw new ZipFileException();
         }
 
         return informationList;
