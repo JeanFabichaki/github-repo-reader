@@ -16,7 +16,7 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.trustly.challenger.githubreporeader.Util.ZippedFileInputStream;
+import com.trustly.challenger.githubreporeader.util.ZippedFileInputStream;
 import com.trustly.challenger.githubreporeader.domain.File;
 import com.trustly.challenger.githubreporeader.repository.ZipFileRepository;
 

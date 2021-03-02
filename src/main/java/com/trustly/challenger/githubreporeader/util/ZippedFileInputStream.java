@@ -1,4 +1,4 @@
-package com.trustly.challenger.githubreporeader.Util;
+package com.trustly.challenger.githubreporeader.util;
 
 import java.io.IOException;
 import java.io.InputStream;
