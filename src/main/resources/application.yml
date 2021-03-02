@@ -1,0 +1,4 @@
+server:
+  port: 8081
+app:
+  url-github-zip-file: https://codeload.github.com/%s/%s/zip/master
