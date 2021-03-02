@@ -11,6 +11,6 @@ Develop an API that returns the total number of lines and the total number of by
 
 https://github-repo-reader.herokuapp.com/api/user/JeanFabichaki/repo/todo-rust
 
-##DockerHub
+## DockerHub
 
 https://hub.docker.com/r/jeanfabichaki/github-repo-reader
